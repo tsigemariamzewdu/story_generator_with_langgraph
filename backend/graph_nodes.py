@@ -1,7 +1,7 @@
 from typing import TypedDict, List, Optional
 from typing_extensions import Annotated
 from langchain.chat_models import init_chat_model
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage,ToolMessage
 from langchain_core.tools import tool
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
@@ -11,6 +11,17 @@ import time
 
 import os
 from dotenv import load_dotenv
+import language_tool_python
+from langchain_core.tools import tool
+from textblob import TextBlob
+
+
+@tool
+def fix_grammar_locally(text: str) -> str:
+    """Corrects spelling and basic grammar mistakes in the story draft locally."""
+    # TextBlob doesn't require an API key or internet
+    corrected = TextBlob(text).correct()
+    return str(corrected)
 
 load_dotenv()
 
@@ -48,23 +59,6 @@ def track_node(node_name: str):
         return wrapper
     return decorator
 
-# -----------------------------
-# Tools
-# -----------------------------
-# @tool
-# def creative_descriptor(prompt: str) -> str:
-#     return f"""
-# Write a highly vivid and immersive story based on the following idea.
-
-# Use:
-# - rich sensory details (sight, sound, smell, touch)
-# - strong imagery and metaphors
-# - emotional depth
-# - atmospheric descriptions
-
-# Story idea:
-# {prompt}
-# """
 
 
 
@@ -131,3 +125,31 @@ def moral_extractor(state: State):
     return {
         "history": state["history"] + [f"Moral: {response.content}"]
     }
+@track_node("grammar_check_node")
+def grammar_check_node(state: State):
+    # Important: Small delay to stay under Gemini's Free Tier RPM limit
+    time.sleep(1) 
+    
+    # Bind the tool so the LLM knows it can use it
+    llm_with_tools = llm.bind_tools([fix_grammar_locally])
+    
+    # We ask the LLM to review the story. It will likely call the tool.
+    response = llm_with_tools.invoke([
+        SystemMessage(content="You are a helpful editor. Use the fix_grammar_locally tool to clean up the story draft."),
+        HumanMessage(content=state["story"])
+    ])
+    
+    return {"messages": [response]}
+
+@track_node("apply_corrections")
+def apply_corrections(state: State):
+    """Takes the output from the tool and updates the 'story' field."""
+    last_message = state["messages"][-1]
+    
+    # If the last message is from a tool, update the story
+    if isinstance(last_message, ToolMessage):
+        return {
+            "story": last_message.content,
+            "history": state["history"] + ["Grammar and spelling improved locally."]
+        }
+    return {} # Do nothing if no tool was called
