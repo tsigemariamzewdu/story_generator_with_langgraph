@@ -9,12 +9,17 @@ from langgraph.types import interrupt, Command
 from datetime import datetime
 import time
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # -----------------------------
 # LLM Initialization
 # -----------------------------
 llm = init_chat_model(
     "google_genai:gemini-2.5-flash",
-    api_key="AIzaSyAiG9LJcFd1vMySp3-cy_0TumXlwBgKrZk"
+    api_key=os.getenv("GOOGLE_API_KEY")
 )
 
 # -----------------------------
