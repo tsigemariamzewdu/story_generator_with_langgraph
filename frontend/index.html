@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryCraft AI | Create, Refine, Master Your Stories</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-book-sparkles"></i>
+                <span>StoryCraft AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="#"><i class="fas fa-home"></i> Home</a>
+                <a href="#"><i class="fas fa-history"></i> Stories</a>
+                <a href="#"><i class="fas fa-user"></i> Profile</a>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="hero-highlight">Craft Your Stories.</span>
+                <span class="hero-subtitle">Watch Them Evolve.</span>
+            </h1>
+            <p class="hero-description">
+                Stay inspired, refine your narratives, and visualize your creative journey 
+                across every story you bring to life.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-magic"></i>
+                    <div>
+                        <h3>AI-Powered</h3>
+                        <p>Intelligent story generation</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-sync-alt"></i>
+                    <div>
+                        <h3>Iterative Refinement</h3>
+                        <p>Multiple revision cycles</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <h3>Progress Tracking</h3>
+                        <p>Visualize your journey</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="app-container">
+        <!-- Left Panel: Story Creation -->
+        <div class="creation-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-wand-magic-sparkles"></i> Story Forge</h2>
+                <p class="panel-subtitle">Ignite your imagination</p>
+            </div>
+
+            <div class="creation-area">
+                <div class="prompt-section">
+                    <div class="section-label">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Story Prompt</h3>
+                    </div>
+                    <div class="prompt-input-container">
+                        <textarea id="prompt" 
+                                  placeholder="✨ Begin your journey... 
+                                  
+Example: A detective robot in a neon-lit city discovers emotions
+Example: A librarian finds books that write themselves
+Example: A painter's colors come to life at midnight"></textarea>
+                        <div class="input-footer">
+                            <div class="char-counter" id="charCounter">0/500</div>
+                            <button id="generateBtn" class="btn-generate">
+                                <i class="fas fa-bolt"></i>
+                                <span>Generate Story</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session Info -->
+                <div class="session-card" id="sessionInfo" style="display: none;">
+                    <div class="session-header">
+                        <i class="fas fa-hourglass-half"></i>
+                        <h3>Creative Session</h3>
+                    </div>
+                    <div class="session-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Session ID</span>
+                            <span class="detail-value" id="sessionId">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Revision Cycle</span>
+                            <div class="revision-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <span class="revision-count" id="revisionCount">0/3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhancement Tools -->
+                <div class="enhancement-tools" id="enhancementSection" style="display: none;">
+                    <div class="tools-header">
+                        <i class="fas fa-sparkles"></i>
+                        <h3>Enhancement Tools</h3>
+                    </div>
+                    <div class="tools-grid">
+                        <button id="generateTitleBtn" class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="tool-content">
+                                <h4>Generate Title</h4>
+                                <p>Create a captivating title</p>
+                            </div>
+                            <div class="tool-status" id="titleStatus">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </button>
+                        <button id="extractMoralBtn" class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-heart-circle-check"></i>
+                            </div>
+                            <div class="tool-content">
+                                <h4>Extract Moral</h4>
+                                <p>Discover the story's essence</p>
+                            </div>
+                            <div class="tool-status" id="moralStatus">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="enhancement-results">
+                        <div class="result-card" id="titleResult" style="display: none;">
+                            <div class="result-header">
+                                <i class="fas fa-heading"></i>
+                                <h4>Story Title</h4>
+                            </div>
+                            <p class="result-content" id="titleText"></p>
+                        </div>
+                        <div class="result-card" id="moralResult" style="display: none;">
+                            <div class="result-header">
+                                <i class="fas fa-scale-balanced"></i>
+                                <h4>Central Theme</h4>
+                            </div>
+                            <p class="result-content" id="moralText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Panel -->
+                <div class="feedback-panel" id="feedbackSection" style="display: none;">
+                    <div class="feedback-header">
+                        <i class="fas fa-comments"></i>
+                        <h3>Story Refinement</h3>
+                    </div>
+                    <div class="feedback-content">
+                        <p class="feedback-message" id="feedbackMessage">
+                            Your feedback shapes the story. What would you like to improve?
+                        </p>
+                        <div class="feedback-input-container">
+                            <textarea id="feedback" 
+                                      placeholder="💡 Suggestions:
+• Make the protagonist more relatable
+• Add sensory details to the setting
+• Develop the conflict further
+• Adjust the pacing
+• Enhance the dialogue"></textarea>
+                            <div class="quick-feedback">
+                                <button class="quick-btn" data-feedback="Make it more descriptive">
+                                    <i class="fas fa-paint-brush"></i> More Descriptive
+                                </button>
+                                <button class="quick-btn" data-feedback="Add character depth">
+                                    <i class="fas fa-user-pen"></i> Character Depth
+                                </button>
+                                <button class="quick-btn" data-feedback="Increase tension">
+                                    <i class="fas fa-fire"></i> More Tension
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feedback-actions">
+                        <button id="submitFeedbackBtn" class="btn-feedback">
+                            <i class="fas fa-rocket"></i>
+                            <span>Apply Refinement</span>
+                        </button>
+                        <button id="doneBtn" class="btn-complete">
+                            <i class="fas fa-trophy"></i>
+                            <span>Finalize Story</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Story Display & History -->
+        <div class="story-panel">
+            <!-- Story Display -->
+            <div class="story-display-card">
+                <div class="story-header">
+                    <div class="story-title-section">
+                        <i class="fas fa-scroll"></i>
+                        <div>
+                            <h2>Your Masterpiece</h2>
+                            <p class="story-subtitle">Watch your story evolve with each refinement</p>
+                        </div>
+                    </div>
+                    <div class="story-actions">
+                        <button class="btn-action" id="copyStoryBtn">
+                            <i class="far fa-copy"></i>
+                        </button>
+                        <button class="btn-action" id="exportStoryBtn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="story-container">
+                    <div class="story-content" id="storyContent">
+                        <div class="empty-state">
+                            <i class="fas fa-feather"></i>
+                            <h3>Your Story Awaits</h3>
+                            <p>Enter a prompt above to begin your creative journey. Watch as your story unfolds and evolves with each refinement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Timeline -->
+            <div class="history-timeline">
+                <div class="timeline-header">
+                    <i class="fas fa-timeline"></i>
+                    <h3>Creative Journey</h3>
+                    <div class="timeline-stats">
+                        <span id="revisionStats">0 Revisions</span>
+                    </div>
+                </div>
+                <div class="timeline-container">
+                    <div class="timeline" id="historyList">
+                        <div class="timeline-empty">
+                            <i class="fas fa-seedling"></i>
+                            <p>Your story's evolution will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar" id="statusBar">
+        <div class="status-content">
+            <div class="status-indicator">
+                <div class="pulse-dot"></div>
+                <span id="statusText">Ready to create magic</span>
+            </div>
+            <div class="status-actions">
+                <div class="spinner" id="loadingSpinner" style="display: none;"></div>
+                <button class="btn-status" id="clearSessionBtn">
+                    <i class="fas fa-trash-arrow-up"></i> New Session
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Background Decorations -->
+    <div class="bg-decoration">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
