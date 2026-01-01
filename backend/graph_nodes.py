@@ -1,27 +1,20 @@
-from typing import TypedDict, List, Optional
-from typing_extensions import Annotated
+from typing import  List, Optional
+from typing_extensions import Annotated,TypedDict
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage,ToolMessage
 from langchain_core.tools import tool
-from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 from langgraph.types import interrupt, Command
-from datetime import datetime
 import time
+from state import State
+from tools import fix_grammar_locally
 
 import os
 from dotenv import load_dotenv
 import language_tool_python
-from langchain_core.tools import tool
-from textblob import TextBlob
 
+from tracker import track_node
 
-@tool
-def fix_grammar_locally(text: str) -> str:
-    """Corrects spelling and basic grammar mistakes in the story draft locally."""
-    # TextBlob doesn't require an API key or internet
-    corrected = TextBlob(text).correct()
-    return str(corrected)
 
 load_dotenv()
 
@@ -33,31 +26,8 @@ llm = init_chat_model(
     api_key=os.getenv("GOOGLE_API_KEY")
 )
 
-# -----------------------------
-# State Definition
-# -----------------------------
-class State(TypedDict):
-    prompt: str
-    story: str
-    feedback: Optional[str]
-    revision_count: int
-    history: List[str]
-    session_id: str
-    messages: Annotated[List, add_messages]
 
-# -----------------------------
-# Utilities
-# -----------------------------
-def track_node(node_name: str):
-    def decorator(func):
-        def wrapper(state: State):
-            print(f"🟢 [{datetime.now().strftime('%H:%M:%S')}] ENTER: {node_name}")
-            start = time.time()
-            result = func(state)
-            print(f"✅ [{datetime.now().strftime('%H:%M:%S')}] EXIT: {node_name} ({time.time()-start:.2f}s)\n")
-            return result
-        return wrapper
-    return decorator
+
 
 
 

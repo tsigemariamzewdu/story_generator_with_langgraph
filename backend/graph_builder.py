@@ -2,7 +2,8 @@ import sqlite3
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.prebuilt import ToolNode
-from graph_nodes import State, generate_story, human_feedback, revise_story, title_generator, moral_extractor,grammar_check_node,fix_grammar_locally,apply_corrections
+from graph_nodes import State, generate_story, human_feedback, revise_story, title_generator, moral_extractor,grammar_check_node,apply_corrections
+from tools import fix_grammar_locally
 
 def create_graph():
     builder = StateGraph(State)
