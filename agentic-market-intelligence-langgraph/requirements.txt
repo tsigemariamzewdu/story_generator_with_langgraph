@@ -1,0 +1,32 @@
+# Core graph runtime (LangGraph 1.x)
+langgraph>=1.0.0
+langgraph-checkpoint>=2.0.0
+
+# LangChain core + model init helpers
+langchain>=1.0.0
+langchain-core>=1.0.0
+
+# Pydantic v2 schema/state models
+pydantic>=2.7.0
+
+# Env loading
+python-dotenv>=1.0.0
+
+# API server
+fastapi>=0.104.0
+uvicorn>=0.24.0
+slowapi>=0.1.9
+
+# ---------------------------------------------------------------------------
+# Optional provider packages — install the one(s) matching your LLM_MODEL.
+# ---------------------------------------------------------------------------
+langchain-google-genai>=2.0.0       # google_genai:* models (default)
+# langchain-openai>=0.2.0            # openai:* models
+# langchain-anthropic>=0.2.0         # anthropic:* models
+
+# ---------------------------------------------------------------------------
+# Search providers are called directly over HTTPS (no extra packages needed).
+# TAVILY_API_KEY and/or SERPER_API_KEY must be set in .env; with neither set,
+# the pipeline falls back to the offline mock.
+# ---------------------------------------------------------------------------
+# requests (pulled in transitively by langchain; used for Tavily/Serper)

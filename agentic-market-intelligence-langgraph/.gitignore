@@ -1,0 +1,19 @@
+# Secrets — never commit real API keys
+.env
+
+# Generated outputs / checkpoints
+outputs/
+checkpoints.db
+checkpoints.db-shm
+checkpoints.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store

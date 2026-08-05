@@ -1,0 +1,27 @@
+# Render blueprint for the Market Intelligence API + frontend (single service).
+# Set GOOGLE_API_KEY and SERPER_API_KEY in the Render dashboard before first
+# deploy. Note: the SQLite checkpointer lives on the instance disk, so thread
+# resume does not survive restarts on the free tier — fine for demos.
+services:
+  - type: web
+    name: market-intelligence
+    runtime: python
+    plan: free
+    healthCheckPath: /health
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: LLM_MODEL
+        value: google_genai:gemini-2.5-flash
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: SERPER_API_KEY
+        sync: false
+      - key: QUALITY_THRESHOLD
+        value: "0.8"
+      - key: MAX_RESEARCH_ITERATIONS
+        value: "3"
+      - key: SEARCH_RESULTS_PER_QUERY
+        value: "5"

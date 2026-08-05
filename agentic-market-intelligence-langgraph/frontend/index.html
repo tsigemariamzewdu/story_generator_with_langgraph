@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market Intelligence — Agentic Pipeline</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">MarketIntel <span class="logo-tag">AI</span></span>
+      </div>
+      <p class="header-sub">Autonomous Competitor Analysis · LangGraph Pipeline</p>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Input -->
+    <section class="card" id="inputCard">
+      <h2>New Intelligence Run</h2>
+      <p class="card-desc">Enter a competitor name or industry keyword. The pipeline will autonomously research, analyze, and draft a B2B intelligence report.</p>
+      <div class="input-row">
+        <input id="companyInput" type="text" placeholder="e.g. Salesforce, HubSpot, Notion…" maxlength="120" />
+        <label class="toggle-label">
+          <input type="checkbox" id="offlineToggle" />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span>Offline / Mock</span>
+        </label>
+        <button id="runBtn" class="btn-primary">Run Pipeline</button>
+      </div>
+    </section>
+
+    <!-- Pipeline progress -->
+    <section class="card hidden" id="progressCard">
+      <div class="progress-header">
+        <h2>Pipeline Executing</h2>
+        <span class="thread-badge" id="threadBadge"></span>
+      </div>
+      <div class="pipeline-track">
+        <div class="pipeline-step" id="step-researcher">
+          <div class="step-dot"></div>
+          <div class="step-label">Researcher</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-step" id="step-analyzer">
+          <div class="step-dot"></div>
+          <div class="step-label">Analyzer</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-step" id="step-evaluator">
+          <div class="step-dot"></div>
+          <div class="step-label">Evaluator</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-step" id="step-human_approval">
+          <div class="step-dot"></div>
+          <div class="step-label">HITL Gate</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-step" id="step-drafter">
+          <div class="step-dot"></div>
+          <div class="step-label">Drafter</div>
+        </div>
+      </div>
+      <div class="status-row">
+        <span class="spinner" id="spinner"></span>
+        <span id="statusText">Starting pipeline…</span>
+      </div>
+    </section>
+
+    <!-- HITL review -->
+    <section class="card hidden" id="hitlCard">
+      <div class="hitl-header">
+        <span class="hitl-badge">⏸ Human-in-the-Loop</span>
+        <h2>Review Research Before Drafting</h2>
+        <p class="card-desc">The pipeline has paused. Review the synthesized intelligence below, then approve or reject.</p>
+      </div>
+      <div class="metrics-grid" id="metricsGrid"></div>
+      <div class="score-row">
+        <div class="score-block">
+          <span class="score-label">Quality Score</span>
+          <span class="score-value" id="qualityScore">—</span>
+        </div>
+        <div class="score-block">
+          <span class="score-label">Retry Loops</span>
+          <span class="score-value" id="retryLoops">—</span>
+        </div>
+        <div class="score-block">
+          <span class="score-label">Source Records</span>
+          <span class="score-value" id="sourceRecords">—</span>
+        </div>
+      </div>
+      <div class="feedback-box hidden" id="feedbackBox">
+        <strong>Evaluator Feedback</strong>
+        <p id="feedbackText"></p>
+      </div>
+      <div class="hitl-actions">
+        <button id="approveBtn" class="btn-primary">✓ Approve &amp; Draft Report</button>
+        <button id="rejectBtn" class="btn-danger">✕ Reject</button>
+      </div>
+    </section>
+
+    <!-- Report -->
+    <section class="card hidden" id="reportCard">
+      <div class="report-header">
+        <div>
+          <h2 id="reportTitle">Intelligence Report</h2>
+          <p class="card-desc" id="reportMeta"></p>
+        </div>
+        <button class="btn-outline" id="exportBtn">↓ Export JSON</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="outreach">Outreach Email</button>
+        <button class="tab" data-tab="followups">Follow-ups</button>
+        <button class="tab" data-tab="raw">Raw JSON</button>
+      </div>
+      <div class="tab-panel active" id="tab-overview">
+        <div class="overview-grid">
+          <div class="ov-block full" id="ov-summary"></div>
+          <div class="ov-block" id="ov-pricing"></div>
+          <div class="ov-block" id="ov-audience"></div>
+          <div class="ov-block" id="ov-vps"></div>
+          <div class="ov-block" id="ov-strengths"></div>
+          <div class="ov-block" id="ov-weaknesses"></div>
+          <div class="ov-block" id="ov-positioning"></div>
+          <div class="ov-block" id="ov-competitors"></div>
+          <div class="ov-block full" id="ov-sources"></div>
+        </div>
+      </div>
+      <div class="tab-panel hidden" id="tab-outreach">
+        <div class="email-card" id="emailContent"></div>
+      </div>
+      <div class="tab-panel hidden" id="tab-followups">
+        <div id="followupsContent"></div>
+      </div>
+      <div class="tab-panel hidden" id="tab-raw">
+        <pre id="rawJson"></pre>
+      </div>
+    </section>
+
+    <!-- Rejected -->
+    <section class="card hidden" id="rejectedCard">
+      <div class="rejected-inner">
+        <span class="rejected-icon">✕</span>
+        <h2>Research Rejected</h2>
+        <p>No report was drafted. The thread is preserved — you can start a new run anytime.</p>
+        <button class="btn-outline" id="newRunBtn">Start New Run</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
